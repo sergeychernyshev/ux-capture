@@ -36,7 +36,8 @@ export default class Zone extends UXBase {
 		if (this.props.startMarkName === INTERACTIVE_TRANSITION_START_MARK_NAME) {
 			// if mark selector is configured, use it to find marks to record
 			if (props.markSelector) {
-				alreadyOnThePage.concat(
+				alreadyOnThePage.push.apply(
+					alreadyOnThePage,
 					configuredMarkNames.filter(
 						markName => props.markSelector(markName).length > 0
 					)
@@ -60,7 +61,7 @@ export default class Zone extends UXBase {
 				}
 
 				if (elementFound) {
-					alreadyOnThePage = alreadyOnThePage.concat(element.marks);
+					alreadyOnThePage.push.apply(alreadyOnThePage, element.marks);
 				}
 			});
 		}
