@@ -32,7 +32,9 @@ export default class Zone extends UXBase {
 
 		// mark names for elements already on the page
 		const alreadyOnThePage =
-			this.props.startMarkName === INTERACTIVE_TRANSITION_START_MARK_NAME
+			this.props.startMarkName === INTERACTIVE_TRANSITION_START_MARK_NAME &&
+			props.elements &&
+			Array.isArray(props.elements)
 				? props.elements.reduce((elements, element) => {
 						const nodes = this.selectDOMNodes(element);
 
