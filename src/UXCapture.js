@@ -19,7 +19,6 @@ export const VIEW_OVERRIDE_ERROR_MESSAGE =
 
 let _onMark;
 let _onMeasure;
-let _markSelector;
 let _elementSelector;
 let _view;
 let _startMarkName = NAVIGATION_START_MARK_NAME;
@@ -47,7 +46,6 @@ const UXCapture = {
 	create: config => {
 		_onMark = config.onMark || NOOP;
 		_onMeasure = config.onMeasure || NOOP;
-		_markSelector = config.markSelector;
 		_elementSelector = config.elementSelector;
 		_startMarkName = NAVIGATION_START_MARK_NAME;
 	},
@@ -65,7 +63,6 @@ const UXCapture = {
 		_view = new View({
 			onMark: _onMark,
 			onMeasure: _onMeasure,
-			markSelector: _markSelector,
 			elementSelector: _elementSelector,
 			startMarkName: _startMarkName,
 			zoneConfigs,
