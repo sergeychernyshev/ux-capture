@@ -34,16 +34,6 @@ export default class Zone extends UXBase {
 		let alreadyOnThePage = [];
 
 		if (this.props.startMarkName === INTERACTIVE_TRANSITION_START_MARK_NAME) {
-			// if mark selector is configured, use it to find marks to record
-			if (props.markSelector) {
-				alreadyOnThePage.push.apply(
-					alreadyOnThePage,
-					configuredMarkNames.filter(
-						markName => props.markSelector(markName).length > 0
-					)
-				);
-			}
-
 			// if elements have selectors defined or global element selector is configured,
 			// use them to find marks to record
 			props.elements.forEach(element => {
