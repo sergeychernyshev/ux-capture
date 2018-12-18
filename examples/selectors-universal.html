@@ -14,7 +14,7 @@
 					.filter(entry => entry.name === name)
 					.pop();
 
-				if (typeof measure.duration !== 'undefined') {
+				if (measure) {
 					// in real world you might be sending this to your custom monitoring solution
 					// (because it does not support W3C UserTiming API natively)
 					console.log('Measure', name, ':', measure.duration);
