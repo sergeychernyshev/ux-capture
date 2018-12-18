@@ -36,7 +36,7 @@ document.querySelector('a[href="page2.html"]').addEventListener('click', e => {
 				elements: [
 					{
 						marks: ['ux-text-page2-content'],
-						elementSelector: '#page2content',
+						elementSelector: () => document.getElementById('page2content'),
 					},
 				],
 			},
