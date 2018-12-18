@@ -31,37 +31,19 @@ export default class Zone extends UXBase {
 			  this.props.marks;
 
 		// mark names for elements already on the page
-		let alreadyOnThePage = [];
+		const alreadyOnThePage =
+			this.props.startMarkName === INTERACTIVE_TRANSITION_START_MARK_NAME
+				? props.elements.reduce((elements, element) => {
+						const nodes = this.selectDOMNodes(element);
 
-		if (this.props.startMarkName === INTERACTIVE_TRANSITION_START_MARK_NAME) {
-			// if elements have selectors defined or global element selector is configured,
-			// use them to find marks to record
-			props.elements.forEach(element => {
-				let elementFound = false;
-				let selectedElements = [];
+						// if array or element list is returned, check if it has one or more entries
+						if (nodes && (typeof nodes.length === 'undefined' || nodes.length > 0)) {
+							elements.push.apply(elements, element.marks);
+						}
 
-				if (element.elementSelector) {
-					if (typeof element.elementSelector === 'function') {
-						selectedElements = element.elementSelector();
-					} else {
-						selectedElements = document.querySelectorAll(element.elementSelector);
-					}
-				} else if (this.props.elementSelector) {
-					selectedElements = this.props.elementSelector(element);
-				}
-
-				if (selectedElements) {
-					elementFound =
-						typeof selectedElements.length === 'undefined'
-							? true // if not an enumerable object, then consider it found
-							: selectedElements.length > 0; // if array or element list is returned, check if it has one or more element
-				}
-
-				if (elementFound) {
-					alreadyOnThePage.push.apply(alreadyOnThePage, element.marks);
-				}
-			});
-		}
+						return elements;
+				  }, [])
+				: []; // in page view mode, expect Zone to be defined before any elements are on the page
 
 		// do not create marks for elements that are already on the page
 		const markNamesToExpect = configuredMarkNames.filter(
@@ -87,6 +69,29 @@ export default class Zone extends UXBase {
 		// create zero-length measure
 		if (configuredMarkNames.length > 0 && markNamesToExpect.length === 0) {
 			this.measure(this.props.startMarkName);
+		}
+	}
+
+	/**
+	 * Returns DOM nodes collection / array or individual DOM Node based on selector configuration
+	 *
+	 * @param {Object} element - individual element configuration object
+	 * @returns {Node|Node[]|null}
+	 */
+	selectDOMNodes(element) {
+		// if elements have selectors defined or global element selector is configured,
+		// use them to find marks to record
+		if (element.elementSelector) {
+			if (typeof element.elementSelector === 'function') {
+				return element.elementSelector();
+			} else {
+				// if not a function, treat it as CSS selector argument
+				return document.querySelectorAll(element.elementSelector);
+			}
+		} else if (this.props.elementSelector) {
+			return this.props.elementSelector(element);
+		} else {
+			return null;
 		}
 	}
 
