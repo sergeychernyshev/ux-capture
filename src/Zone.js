@@ -48,16 +48,23 @@ export default class Zone extends UXBase {
 			// use them to find marks to record
 			props.elements.forEach(element => {
 				let elementFound = false;
+				let selectedElements = [];
 
 				if (element.elementSelector) {
 					if (typeof element.elementSelector === 'function') {
-						elementFound = element.elementSelector().length > 0;
+						selectedElements = element.elementSelector();
 					} else {
-						elementFound =
-							document.querySelectorAll(element.elementSelector).length > 0;
+						selectedElements = document.querySelectorAll(element.elementSelector);
 					}
 				} else if (this.props.elementSelector) {
-					elementFound = this.props.elementSelector(element).length > 0;
+					selectedElements = this.props.elementSelector(element);
+				}
+
+				if (selectedElements) {
+					elementFound =
+						typeof selectedElements.length === 'undefined'
+							? true // if not an enumerable object, then consider it found
+							: selectedElements.length > 0; // if array or element list is returned, check if it has one or more element
 				}
 
 				if (elementFound) {
